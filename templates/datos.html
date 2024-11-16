@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos del Terrario</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <h1>Datos del Terrario</h1>
+    <div class="data">
+        <p>Temperatura: <span id="temperature">Cargando...</span>°C</p>
+        <p>Presión: <span id="pressure">Cargando...</span> hPa</p>
+    </div>
+
+    <script>
+        // Función para actualizar los datos de temperatura y presión
+        function updateData() {
+            fetch('/temperature')  // Endpoint que devuelve los datos del sensor
+                .then(response => response.json())
+                .then(data => {
+                    // Actualiza los elementos del DOM con los nuevos datos
+                    document.getElementById('temperature').innerText = data.temperature ?? 'No disponible';
+                    document.getElementById('pressure').innerText = data.pressure ?? 'No disponible';
+                })
+                .catch(err => {
+                    console.error('Error al actualizar los datos:', err);
+                });
+        }
+
+        // Llama a la función cada 10 segundos
+        setInterval(updateData, 10000);
+        updateData(); // Llama a la función inicialmente
+    </script>
+</body>
+</html>
